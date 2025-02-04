@@ -1,10 +1,43 @@
-name: sbc-board
+#name: talos-sbc-rk3588
+#variant: scratch
+#shell: /toolchain/bin/bash
+#dependencies:
+#  - stage: base
+#  - stage: rk3588
+#  - stage: u-boot
+#    platform: linux/arm64
+#  - stage: talos-kernel-rk3588
+#    platform: linux/arm64
+#  - stage: profiles
+#steps:
+#  - prepare:
+#      - |
+#        mkdir -p /rootfs/artifacts/arm64/dtb/rockchip
+#        cp /dtb/rockchip/rk3588*.dtb /rootfs/artifacts/arm64/dtb/rockchip/
+#finalize:
+#  - from: /rootfs
+#    to: /
+
+
+name: talos-sbc-cm3
 variant: scratch
+shell: /toolchain/bin/bash
 dependencies:
-  - stage: board
+  - stage: base
+  - stage: cm3
   - stage: u-boot
     platform: linux/arm64
+  - stage: talos-kernel-cm3
+    platform: linux/arm64
   - stage: profiles
+steps:
+  - prepare:
+    - |
+      mkdir -p /rootfs/artifacts/arm64/dtb/rockchip
+      mkdir -p /rockchip_own
+      curl -L https://github.com/Christos822/cm3_latest/raw/main/rockchip/rk3566-radxa-cm3-io.dtb -o /rockchip_own/rk3566-radxa-cm3-io.dtb
+      cp /rockchip_own/rk3566-radxa-cm3-io.dtb /rootfs/artifacts/arm64/dtb/rockchip/
+      rm -rf /rockchip_own
 finalize:
   - from: /rootfs
     to: /

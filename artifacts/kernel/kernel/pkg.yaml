@@ -1,0 +1,50 @@
+name: talos-kernel-cm3
+variant: alpine
+dependencies: []
+steps:
+  - env:
+      ARCH: {{ if eq .ARCH "aarch64" }}arm64{{ else }}unsupported{{ end }}
+    install:
+      - |
+        apk add --no-cache curl
+        mkdir -p /rootfs/boot
+        mkdir -p /rootfs/dtb
+        mkdir -p /rootfs/certs
+        mkdir -p /rootfs/lib/modules/
+        
+        case $ARCH in
+            x86_64)
+                mv arch/x86/boot/bzImage /rootfs/boot/vmlinuz
+                ;;
+            arm64)
+                curl -L https://github.com/Christos822/cm3_latest/raw/main/x509.genkey -o /rootfs/certs/signing_key.x509
+                curl -L https://github.com/Christos822/cm3_latest/raw/main/Image -o /rootfs/boot/vmlinuz
+                
+                attempts=0
+                max_attempts=3
+                while [ $attempts -lt $max_attempts ]; do
+                    curl -L "https://github.com/Christos822/cm3_latest/archive/refs/heads/main.zip" -o "/tmp/modules.zip" && break
+                    attempts=$((attempts + 1))
+                    sleep 5
+                done
+                if [ $attempts -eq $max_attempts ]; then
+                    echo "Failed to download the modules zip after several attempts."
+                    exit 1
+                fi
+                mkdir -p /tmp/modules_extraction
+                unzip -o /tmp/modules.zip "cm3_latest-main/modules/*" -d /tmp/modules_extraction
+                mv /tmp/modules_extraction/cm3_latest-main/modules/* /rootfs/lib/modules/
+                rm -rf /tmp/modules_extraction
+                rm /tmp/modules.zip
+                ;;
+            *)
+                echo "unsupported arch ${ARCH}"
+                exit 1
+                ;;
+        esac
+finalize:
+  - from: /rootfs
+    to: /
+
+
+

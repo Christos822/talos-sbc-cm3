@@ -1,0 +1,11 @@
+make PUSH=true PLATFORM=linux/arm64 USERNAME=christos822 TAG=<ch_version> 
+
+make imager PKG_KERNEL=ghcr.io/christos822/talos-kernel-cm3:<ch_version> TAG=<ch_version> PLATFORM=linux/arm64 INSTALLER_ARCH=targetarch USERNAME=christos822 PUSH=true
+
+docker run --rm -e GITHUB_USERNAME=${GITHUB_USERNAME} -e GITHUB_TOKEN=${GITHUB_TOKEN} -t -v ./_out:/out -v /dev:/dev --privileged ghcr.io/christos822/imager:<ch_vesrion>  installer --arch arm64     --base-installer-image="ghcr.io/siderolabs/installer:v1.7.4"     --overlay-name=cm3     --overlay-image=ghcr.io/christos822/talos-sbc-cm3:<ch_vesrion>    --overlay-option="board=cm3"     --overlay-option="chipset=cm3" 
+
+
+crane push _out/installer-arm64.tar ghcr.io/christos822/installer:<ch_version>
+
+docker run --rm -e GITHUB_USERNAME=${GITHUB_USERNAME} -e GITHUB_TOKEN=${GITHUB_TOKEN} -t -v ./_out:/out -v /dev:/dev --privileged ghcr.io/christos822/imager:<ch_version> metal --arch arm64   --overlay-image=ghcr.io/christos822/talos-sbc-cm3:<ch_version>   --overlay-name=cm3   --overlay-option="board=cm3" --overlay-option="chipset=rk3566" --base-installer-image=ghcr.io/christos822/installer:<ch_version>
+

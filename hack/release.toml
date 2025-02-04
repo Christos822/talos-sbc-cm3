@@ -1,0 +1,11 @@
+# commit to be tagged for the new release
+commit = "HEAD"
+
+project_name = "talos-sbc-cm3"
+github_repo = "christos822/talos-sbc-cm3"
+match_deps = "^github.com/(christos822/[a-zA-Z0-9-]+)$"
+
+# previous = -
+# pre_release = true
+
+# [notes]

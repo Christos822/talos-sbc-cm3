@@ -2,7 +2,8 @@
 kind: pkgfile.Build
 spec:
   targets:
-    - sbc-board
+    - talos-sbc-cm3
+    - talos-kernel-cm3
   extraBuildArgs:
     - PKGS_PREFIX
     - PKGS
@@ -11,7 +12,7 @@ spec:
       - name: PKGS_PREFIX
         defaultValue: ghcr.io/siderolabs
       - name: PKGS
-        defaultValue: v1.7.0-alpha.0-33-g3aacf03
+        defaultValue: v1.7.0
 ---
 kind: common.Build
 spec:
