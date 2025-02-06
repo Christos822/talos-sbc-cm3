@@ -34,7 +34,7 @@ steps:
       - mkdir -p /rootfs/artifacts/arm64/u-boot/cm3
   - install:
       - apk add --no-cache curl
-      - curl -L https://github.com/Christos822/cm3_files/raw/main/u-boot-rockchip.bin -o /rootfs/artifacts/arm64/u-boot/cm3/u-boot.bin
+      - curl -L https://github.com/Christos822/cm3_latest/raw/main/u-boot-rockchip.bin -o /rootfs/artifacts/arm64/u-boot/cm3/u-boot.bin
 finalize:
   - from: /rootfs
     to: /rootfs

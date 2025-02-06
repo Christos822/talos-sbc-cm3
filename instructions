@@ -9,3 +9,7 @@ crane push _out/installer-arm64.tar ghcr.io/christos822/installer:<ch_version>
 
 docker run --rm -e GITHUB_USERNAME=${GITHUB_USERNAME} -e GITHUB_TOKEN=${GITHUB_TOKEN} -t -v ./_out:/out -v /dev:/dev --privileged ghcr.io/christos822/imager:<ch_version> metal --arch arm64   --overlay-image=ghcr.io/christos822/talos-sbc-cm3:<ch_version>   --overlay-name=cm3   --overlay-option="board=cm3" --overlay-option="chipset=rk3566" --base-installer-image=ghcr.io/christos822/installer:<ch_version>
 
+
+export GITHUB_USERNAME=christos822
+export GITHUB_TOKEN=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
+
