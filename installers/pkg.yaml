@@ -36,8 +36,13 @@ steps:
       mkdir -p /rootfs/artifacts/arm64/dtb/rockchip
       mkdir -p /rockchip_own
       curl -L https://github.com/Christos822/cm3_latest/raw/main/rockchip/rk3566-radxa-cm3-io.dtb -o /rockchip_own/rk3566-radxa-cm3-io.dtb
+      curl -L https://github.com/Christos822/cm3_latest/raw/main/rockchip/overlay/rk3568-spi3-m0-cs0-spidev.dtbo -o /rockchip_own/rk3568-spi3-m0-cs0-spidev.dtbo
+
+      ls -l /rockchip_own  # Debugging line to confirm the file is downloaded
       cp /rockchip_own/rk3566-radxa-cm3-io.dtb /rootfs/artifacts/arm64/dtb/rockchip/
+      cp /rockchip_own/rk3568-spi3-m0-cs0-spidev.dtbo /rootfs/artifacts/arm64/dtb/rockchip/rk3568-spi3-m0-cs0-spidev.dtbo
       rm -rf /rockchip_own
 finalize:
   - from: /rootfs
     to: /
+

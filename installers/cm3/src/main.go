@@ -170,14 +170,13 @@ func (i *CM3Installer) GetOptions(extra cm3ExtraOpts) (overlay.Options, error) {
 	}
 
 	kernelArgs := []string{
-		"sysctl.kernel.kexec_load_disabled=0",
+		"sysctl.kernel.kexec_load_disabled=1",
 		"talos.dashboard.disabled=0",
 		"slab_nomerge",
 		"earlycon=uart8250,mmio32,0xfeb50000",
 		"console=ttyFIQ0,1500000n8",
 		"consoleblank=0",
 		"console=ttyS2,1500000n8",
-		"console=tty1",
 		"loglevel=7",
 		"cgroup_enable=cpuset",
 		"swapaccount=1",
@@ -242,6 +241,17 @@ func (i *CM3Installer) Install(options overlay.InstallOptions[cm3ExtraOpts]) err
 	if err != nil {
 		return err
 	}
+
+	// ----------------------------------------------------------------
+	// Insert the DTBO 
+	// ----------------------------------------------------------------
+
+	  dtbo := filepath.Join("rockchip", "overlay", "rk3568-spi3-m0-cs0-spidev.dtbo")
+	  dtboSrc := filepath.Join(options.ArtifactsPath, "arm64/dtb", dtbo)
+	  dtboDst := filepath.Join(options.MountPrefix, "/boot/EFI/dtb", dtbo)
+
+	  _ = os.MkdirAll(filepath.Dir(dtboDst), 0o600)
+	  _ = copy.File(dtboSrc, dtboDst)
 
 	return copy.File(src, dst)
 }
